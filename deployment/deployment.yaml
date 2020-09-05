@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bookmyticket
+spec:
+  selector:
+    matchLabels:
+      app: bookmyticket
+  template:
+    metadata:
+      labels:
+        app: bookmyticket
+    spec:
+      containers:
+        - name: bookmyticket
+          image: bookmyticket:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            requests:
+              cpu: 100m
+            limits:
+              cpu: 100m
