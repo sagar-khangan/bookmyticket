@@ -1,4 +1,17 @@
+import uuid
+
+from django.conf import settings
 from django.db import models
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
+
 
 BOOKING_STATUS = [
     ("BOOKED", "BOOKED"),
@@ -15,11 +28,23 @@ class City(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
 
 class Cinema(models.Model):
     name = models.CharField(max_length=1024)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
 
 
 class CinemaHall(models.Model):
@@ -29,12 +54,24 @@ class CinemaHall(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
 
 class Audi(models.Model):
     name = models.CharField(max_length=32)
     cinema_hall = models.ForeignKey(to=CinemaHall, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
 
 
 class Movie(models.Model):
@@ -48,14 +85,27 @@ class Movie(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return self.name
+
 
 class MovieShow(models.Model):
     movie = models.ForeignKey(to=Movie, on_delete=models.CASCADE)
     audi = models.ForeignKey(to=Audi, on_delete=models.CASCADE)
     show_time = models.DateTimeField()
     price = models.FloatField(default=0)
+    is_playing = models.BooleanField(default=False)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.movie.name}-{self.show_time}"
+
+    def __repr__(self):
+        return f"{self.movie.name}-{self.show_time}"
 
 
 class Seat(models.Model):
@@ -65,17 +115,31 @@ class Seat(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"{self.row}-{self.seat_no}"
+
+    def __repr__(self):
+        return f"{self.row}-{self.seat_no}"
+
 
 class Booking(models.Model):
     movie_show = models.ForeignKey(to=MovieShow, on_delete=models.CASCADE)
-    booked = models.BooleanField(default=False)
-    status = models.CharField(choices=BOOKING_STATUS, null=True, blank=True,max_length=128)
-    paid = models.BooleanField(default=False)
-    active = models.BooleanField(default=False)
+    booking_uuid = models.UUIDField(default=uuid.uuid4(), unique=True)
+    user = models.ForeignKey(to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    booked = models.BooleanField(default=True)
+    status = models.CharField(choices=BOOKING_STATUS, null=True, blank=True, max_length=128, default="BOOKED")
+    paid = models.BooleanField(default=True)
+    active = models.BooleanField(default=True)
     amount = models.FloatField(default=0)
     seat_count = models.PositiveIntegerField(default=0)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.movie_show.movie.name}-{self.movie_show.show_time}"
+
+    def __repr__(self):
+        return f"{self.movie_show.movie.name}-{self.movie_show.show_time}"
 
 
 class SeatReservation(models.Model):
@@ -84,3 +148,8 @@ class SeatReservation(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
+    def __str__(self):
+        return f"{self.booking.id}"
+
+    def __repr__(self):
+        return f"{self.booking.id}"
