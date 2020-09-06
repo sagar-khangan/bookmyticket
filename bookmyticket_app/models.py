@@ -68,10 +68,10 @@ class Audi(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return self.name
+        return f"{self.name}-{self.cinema_hall.name}-{self.cinema_hall.city.name}"
 
     def __repr__(self):
-        return self.name
+        return f"{self.name}-{self.cinema_hall.name}-{self.cinema_hall.city.name}"
 
 
 class Movie(models.Model):
@@ -116,10 +116,11 @@ class Seat(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return f"{self.row}-{self.seat_no}"
+        return f"{self.audi}-{self.row}-{self.seat_no}"
 
     def __repr__(self):
-        return f"{self.row}-{self.seat_no}"
+        return f"{self.audi}-{self.row}-{self.seat_no}"
+        return f"{self.audi}-{self.row}-{self.seat_no}"
 
 
 class Booking(models.Model):
