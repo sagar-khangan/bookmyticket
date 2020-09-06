@@ -25,7 +25,7 @@ SECRET_KEY = "xyb^h34)#t1^m!pm@92=f%kv#p-gwsnz14axi&^dz(ozprbhv("
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = os.environ.get('HOST(','localhost').split(',')
+ALLOWED_HOSTS = os.environ.get('HOST','localhost').split(',')
 
 # Application definition
 
@@ -95,11 +95,12 @@ try:
             'USER': _db[0],
             'PASSWORD': _db[1].split("@")[0],
             'HOST': _db[1].split("@")[1],
-            'PORT': _db[2].split("/")[0],
+            'PORT': int(_db[2].split("/")[0]),
         }
     }
+
 except Exception as e:
-    print("DB cannot be conencted, using local ")
+    print("DB cannot be connected, using local ")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
