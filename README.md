@@ -33,7 +33,7 @@ To run kubernets service locally
 > $ kubectl port-forward service/bookmyticket 8000:8000
  
 This repository also contains CI/CD - 
- CI file = .github/workflow/ci.yaml
- for CD deployment can be configured in Heroku which usees Procfile
+ CI using github actions file = .github/workflow/ci.yaml \
+ for CD deployment can be configured in Heroku which uses Procfile
 
 
