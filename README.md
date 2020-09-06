@@ -3,6 +3,10 @@ Backend APIs for Ticket Booking application
 
 ###This repository contains djagno rest backed for Movie Booking app 
 
+Note: Set environement variables - 
+1. DEBUG = 0/1
+2. DATABASE_URL (should be valid conenction string) - this project uses porstgres or you can use sqlite for local development.
+
 To run locally 
 
 > $ pip install -r requirements.txt \
