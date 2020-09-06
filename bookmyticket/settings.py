@@ -25,7 +25,7 @@ SECRET_KEY = "xyb^h34)#t1^m!pm@92=f%kv#p-gwsnz14axi&^dz(ozprbhv("
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=0))
 
-ALLOWED_HOSTS = ["localhost"]
+ALLOWED_HOSTS = os.environ.get('HOST(','localhost').split(',')
 
 # Application definition
 
@@ -90,7 +90,7 @@ try:
 
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'ENGINE': 'django.db.backends.postgresql',
             'NAME': _db[2].split("/")[1],
             'USER': _db[0],
             'PASSWORD': _db[1].split("@")[0],
