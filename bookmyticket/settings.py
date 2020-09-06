@@ -57,8 +57,7 @@ ROOT_URLCONF = 'bookmyticket.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]
-        ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -76,12 +75,38 @@ WSGI_APPLICATION = 'bookmyticket.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# Heroku
+DATABASE_URL = os.environ.get('DATABASE_URL','')
+try:
+    _db = DATABASE_URL.split("//")[1]
+    _db = _db.split(":")
+
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': _db[2].split("/")[1],
+            'USER': _db[0],
+            'PASSWORD': _db[1].split("@")[0],
+            'HOST': _db[1].split("@")[1],
+            'PORT': _db[2].split("/")[0],
+        }
     }
-}
+except Exception as e:
+    print("DB cannot be conencted, using local ")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
