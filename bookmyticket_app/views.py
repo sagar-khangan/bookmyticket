@@ -13,6 +13,11 @@ from bookmyticket_app.serializers import MovieSerializer, SeatSerializer, MovieS
 logger = get_logger(__name__)
 
 
+class Health(ListAPIView):
+    def get(self, request, *args, **kwargs):
+        return Response({"status": "success"})
+
+
 class MovieInCityView(ListAPIView):
     serializer_class = MovieSerializer
 
