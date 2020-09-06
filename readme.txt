@@ -1,6 +1,6 @@
 Run in dev
 
->docker-compose up
+>docker-compose up --build
 
 
 For Prod
@@ -12,3 +12,5 @@ eval $(minikube docker-env)
 
 for local testing
 kubectl port-forward service/bookmyticket 8000:8000
+
+python manage.py collectstatic
