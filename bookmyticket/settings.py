@@ -26,6 +26,7 @@ SECRET_KEY = "xyb^h34)#t1^m!pm@92=f%kv#p-gwsnz14axi&^dz(ozprbhv("
 DEBUG = int(os.environ.get("DEBUG", default=0))
 
 ALLOWED_HOSTS = os.environ.get('HOST(','localhost').split(',')
+print("ALLOWED_HOSTS",ALLOWED_HOSTS)
 
 # Application definition
 
